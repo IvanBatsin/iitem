@@ -1,7 +1,7 @@
 import Modal from './modal/modal';
 import './styles/styles.css';
 import User from './types/user';
-import UsersView from './views/usersView';
+import UsersView from './views/usersView/usersView';
 
 const usersBlock = document.querySelector('.fans-container') as HTMLElement;
 const mainBlock = document.querySelector('.main-container');
@@ -11,7 +11,7 @@ class App {
   usersPage!: UsersView;
 
   constructor() {
-    this.modal =  new Modal(document.querySelector('.modal-container')!, this.updateUsersData.bind(this), 'my_modal');
+    this.modal =  new Modal(this.updateUsersData.bind(this), 'my_modal');
     this.usersPage = new UsersView(usersBlock, this.modal);
   }
 

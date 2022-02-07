@@ -19,10 +19,16 @@
       "email": "Nathan@yesenia.net"
     },
     {
-      "email": "last@wewe.com",
-      "name": "John",
+      "email": "BiBones@sddfdf",
+      "name": "dfdfdf",
       "password": "123456",
       "id": 4
+    },
+    {
+      "email": "BiBones@ererer",
+      "name": "ererer",
+      "password": "123456",
+      "id": 5
     }
   ]
 }

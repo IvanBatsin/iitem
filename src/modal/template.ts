@@ -1,7 +1,7 @@
-export const getTemplate = (additionClass: string): string => {
+export const getTemplate = (modalClass: string): string => {
   return `
     <div class="overlay show">
-      <div class="modal fade show ${additionClass ? additionClass : ''}" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade show ${modalClass}" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
