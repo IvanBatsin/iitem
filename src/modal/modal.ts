@@ -18,8 +18,8 @@ export default class Modal {
   private formSubmutControl!: (e: Event) => Promise<void>
   private destroyFunc: () => void
 
-  constructor(rootEl: HTMLElement, emit: (user: User) => void, className: string) {
-    this.rootEl = rootEl;
+  constructor(emit: (user: User) => void, className: string) {
+    this.rootEl = document.querySelector('.modal-container')!;
     this.emit = emit;
     this.className = className;
 
@@ -39,34 +39,11 @@ export default class Modal {
       });
 
       await this.addUser(newUser);
+      this.destroy();
     }
 
     this.destroyFunc = () => this.destroy();
   } 
-
-  private disableBtns = (): void => {
-    if (this.isLoading) {
-      this.closeBtn!.disabled = true;
-      this.submitBtn!.disabled = true;
-      return;
-    }
-
-    this.closeBtn!.disabled = false;
-    this.submitBtn!.disabled = false;
-  }
-
-  init(): void {
-    this.rootEl.innerHTML = getTemplate(this.className);
-    this.overlay = this.rootEl.querySelector('.overlay');
-    this.modal = this.overlay!.querySelector(`.${this.className}`);
-    this.form = this.modal?.querySelector('.needs-validation') as HTMLFormElement;
-    this.alert = this.form.querySelector('#alert');
-    this.closeBtn = this.form?.querySelector('#closeBtn') as HTMLButtonElement;
-    this.submitBtn = this.form?.querySelector('#submitBtn') as HTMLButtonElement;
-
-    this.form?.addEventListener('submit', this.formSubmutControl);
-    this.closeBtn.addEventListener('click', this.destroyFunc);
-  }
 
   private async addUser(user: User): Promise<void> {
     this.isLoading = true;
@@ -96,6 +73,30 @@ export default class Modal {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  private disableBtns = (): void => {
+    if (this.isLoading) {
+      this.closeBtn!.disabled = true;
+      this.submitBtn!.disabled = true;
+      return;
+    }
+
+    this.closeBtn!.disabled = false;
+    this.submitBtn!.disabled = false;
+  }
+
+  init(): void {
+    this.rootEl.innerHTML = getTemplate(this.className);
+    this.overlay = this.rootEl.querySelector('.overlay');
+    this.modal = this.overlay!.querySelector(`.${this.className}`);
+    this.form = this.modal?.querySelector('.needs-validation') as HTMLFormElement;
+    this.alert = this.form.querySelector('#alert');
+    this.closeBtn = this.form?.querySelector('#closeBtn') as HTMLButtonElement;
+    this.submitBtn = this.form?.querySelector('#submitBtn') as HTMLButtonElement;
+
+    this.form?.addEventListener('submit', this.formSubmutControl);
+    this.closeBtn.addEventListener('click', this.destroyFunc);
   }
 
   destroy(): void {

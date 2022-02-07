@@ -1,4 +1,4 @@
-import User from "../../types/user";
+import User from "../../../types/user";
 
 export const UserCard = (user: User): string => {
   return `
