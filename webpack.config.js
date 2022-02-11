@@ -4,6 +4,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const WebpackCopyPlugin = require('copy-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -17,6 +18,7 @@ const setPlugins = () => {
     template: './index.html'
     }),
     new CleanWebpackPlugin(),
+    new Dotenv(),
     new MiniCssExtractPlugin({
       filename: setName('css')
     }),
