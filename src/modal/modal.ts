@@ -1,7 +1,6 @@
 import { getTemplate } from "./template";
 import './styles.css';
 import User from "../types/user";
-import { baseUrl } from "../globalVars";
 
 export default class Modal {
   private rootEl!: HTMLElement;
@@ -49,7 +48,7 @@ export default class Modal {
     this.isLoading = true;
     this.disableBtns();
     try { 
-      const reqUserExist = await window.fetch(`${baseUrl}?name=${user.email}`, {
+      const reqUserExist = await window.fetch(`${process.env.BASE_URL!}?name=${user.email}`, {
         method: 'GET'
       });
       const resUserExist = await reqUserExist.json() as User[];
@@ -60,7 +59,7 @@ export default class Modal {
         return;
       }
 
-      const reqCreateUser = await window.fetch(baseUrl, {
+      const reqCreateUser = await window.fetch(process.env.BASE_URL!, {
         method: 'POST',
         body: JSON.stringify(user),
         headers: {

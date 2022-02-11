@@ -2,7 +2,6 @@ import User from "../../types/user";
 import { UserCard } from "./templates/userCard";
 import { UsersPageTemplate } from "./templates/container";
 import Modal from "../../modal/modal";
-import { baseUrl } from "../../globalVars";
 import './styles.css';
 
 export default class UsersView {
@@ -32,7 +31,7 @@ export default class UsersView {
     return template;
   }
 
-  private async rerenderUsersBlock() {
+  private rerenderUsersBlock(): void {
     this.usersBlock!.innerHTML = '';
     this.usersBlock!.innerHTML += this.getUsersTemplate();
   }
@@ -46,7 +45,7 @@ export default class UsersView {
     try {
       this.isLoading = true;
       this.rootEl.innerHTML += UsersPageTemplate(this.getUsersTemplate.bind(this), this.isLoading);
-      const req = await window.fetch(baseUrl);
+      const req = await window.fetch(process.env.BASE_URL!);
       const res = await req.json() as User[];
       this.data = res;
       this.isLoading = false;

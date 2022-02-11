@@ -7,7 +7,7 @@ export const UsersPageTemplate = (usersTemplate: () => string, isLoading: boolea
         A simple danger alert—check it out!
       </div>
       <button type="button" id="add" class="btn btn-primary col-2">Create</button>
-      <div class="users-block row justify-content-center w-100">
+      <div class="users-block row justify-content-center w-100 mt-4">
         ${isLoading ? Loader() : usersTemplate()}
       </div>
     </div>
