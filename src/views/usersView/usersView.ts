@@ -3,21 +3,21 @@ import { UserCard } from "./templates/userCard";
 import { UsersPageTemplate } from "./templates/container";
 import Modal from "../../modal/modal";
 import './styles.css';
+import BaseView from "../../types/baseView";
 
-export default class UsersView {
+export default class UsersView implements BaseView {
   private rootEl: HTMLElement;
   private data!: User[];
   private isLoading!: boolean;
   private addButton: HTMLButtonElement | null = null;
   private usersBlock: HTMLDivElement | null = null;
-  private alertBlock: HTMLDivElement | null = null;
   private modal!: Modal;
 
   private showModal!: () => void;
 
-  constructor(rootEl: HTMLElement, modal: Modal) {
-    this.rootEl = rootEl;
-    this.modal = modal;
+  constructor(className: string) {
+    this.rootEl = document.querySelector(className) as HTMLElement;
+    this.modal = new Modal(this.addNewUser.bind(this));
 
     this.showModal = () => this.modal.init();
   }
@@ -53,12 +53,12 @@ export default class UsersView {
       this.rootEl.innerHTML += UsersPageTemplate(this.getUsersTemplate.bind(this), this.isLoading);
       this.usersBlock = this.rootEl.querySelector('#users_page_alert');
       this.addButton = this.rootEl.querySelector('#add');
-      this.usersBlock = this.rootEl.querySelector('.users-block');
+      this.usersBlock = this.rootEl.querySelector('.users-block');;
   
       this.addButton?.addEventListener('click', this.showModal);
     } catch (error) {
       console.log(error);
-      this.alertBlock!.style.display = 'block';
+      (this.rootEl.querySelector!('#users_page_alert') as HTMLElement).style.display = 'block';
     }
   }
 

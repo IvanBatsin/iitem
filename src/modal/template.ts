@@ -23,13 +23,6 @@ export const getTemplate = (modalClass: string): string => {
                     Name is required
                   </div>
                 </div>
-                <div>
-                  <label for="exampleFormControlInput3" class="form-label">Password</label>
-                  <input type="password" data-type="password" class="form-control" id="exampleFormControlInput3" required>
-                  <div class="invalid-feedback">
-                    Password is required
-                  </div>
-                </div>
                 <div class="modal-footer">
                   <div class="alert alert-danger w-100" id="alert" role="alert">
                     Email is already in use 
