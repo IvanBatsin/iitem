@@ -1,28 +1,61 @@
-import Modal from './modal/modal';
 import './styles/styles.css';
-import User from './types/user';
+import BaseView from './types/baseView';
+import { Routers } from './types/router';
+import { getPathFromHash } from './utils/getPath';
 import UsersView from './views/usersView/usersView';
 
 const usersBlock = document.querySelector('.fans-container') as HTMLElement;
 const mainBlock = document.querySelector('.main-container');
 
 class App {
-  modal!: Modal;
-  usersPage!: UsersView;
+  private usersPage!: UsersView;
+  private currentView!: BaseView;
+  private routers!: Routers;
+  private defaultPath: string | undefined = undefined;
+  private currentPath!: string;
 
-  constructor() {
-    this.modal =  new Modal(this.updateUsersData.bind(this), 'my_modal');
-    this.usersPage = new UsersView(usersBlock, this.modal);
+  constructor(routers: Routers) {
+    this.routers = routers;
+
+    this.setDefaultPath();
+    this.currentPath = getPathFromHash(window.location.hash);
+    
+    if (!this.currentPath && this.defaultPath) {
+      window.location.hash = this.defaultPath;
+      this.currentPath = getPathFromHash(window.location.hash);
+    }
+
+    this.render();
   }
 
-  updateUsersData(user: User): void {
-    this.usersPage.addNewUser(user);
+  private setDefaultPath = (): void => {
+    Object.keys(this.routers).forEach(path => {
+      // @ts-ignore
+      if (this.routers[path].default) {
+        this.defaultPath = path;
+      }
+    });
   }
 
-  renderPage() {
-    this.usersPage.render();
+  private render(): void {
+    this.currentView = new this.routers[this.currentPath].view(this.routers[this.currentPath].className);
+    this.currentView.render();
   }
 }
 
-const app = new App();
-app.renderPage();
+const routers: Routers = {
+  'users': {
+    className: '.fans-container',
+    view: UsersView,
+    // @ts-ignore
+    default: true
+  }
+}
+const app = new App(routers);
+
+window.addEventListener('hashchange', (e: Event) => {
+  e.preventDefault();
+
+  // 1) Get hash and compare with site map
+  // 2) Render component 
+});
