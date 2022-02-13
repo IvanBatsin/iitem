@@ -1,0 +1,9 @@
+.navigation {
+  justify-content: flex-start !important;
+}
+
+@media screen and (max-width: 767px) {
+  .navigation {
+    justify-content: space-between !important;
+  }
+}

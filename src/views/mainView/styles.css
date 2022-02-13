@@ -1,0 +1,43 @@
+.stage {
+  height: 300px;
+  background-size: cover;
+  background-position: center;
+}
+.stage-1 {
+  background-image: url('../../assets/childhood.jpg');
+}
+.stage-2 {
+  background-image: url('../../assets/university.jpg');
+}
+.stage-3 {
+  background-image: url('../../assets/work.jpg');
+}
+.card-img-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.card-hover {
+  transition: .2s ease;
+}
+.card-hover:hover {
+  transform: translateY(3px);
+  box-shadow: 2px 2px 15px grey;
+}
+
+.social-icon {
+  transition: .2s ease-in-out;
+}
+.social-icon:hover {
+  fill: #0d6efd;
+  animation-name: socila_icon;
+  animation-duration: 1s;
+}
+
+@keyframes socila_icon {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
