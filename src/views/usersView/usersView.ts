@@ -5,7 +5,7 @@ import Modal from "../../modal/modal";
 import './styles.css';
 import BaseView from "../../types/baseView";
 
-export default class UsersView implements BaseView {
+export default class UsersView extends BaseView {
   private rootEl: HTMLElement;
   private data!: User[];
   private isLoading!: boolean;
@@ -15,8 +15,9 @@ export default class UsersView implements BaseView {
 
   private showModal!: () => void;
 
-  constructor(className: string) {
-    this.rootEl = document.querySelector(className) as HTMLElement;
+  constructor(selector: string) {
+    super(selector);
+    this.rootEl = document.querySelector(selector) as HTMLElement;
     this.modal = new Modal(this.addNewUser.bind(this));
 
     this.showModal = () => this.modal.init();
@@ -64,5 +65,6 @@ export default class UsersView implements BaseView {
 
   destroy(): void {
     this.addButton?.removeEventListener('click', this.showModal);
+    this.rootEl.innerHTML = '';
   }
 }

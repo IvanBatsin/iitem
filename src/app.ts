@@ -3,59 +3,82 @@ import BaseView from './types/baseView';
 import { Routers } from './types/router';
 import { getPathFromHash } from './utils/getPath';
 import UsersView from './views/usersView/usersView';
-
-const usersBlock = document.querySelector('.fans-container') as HTMLElement;
-const mainBlock = document.querySelector('.main-container');
+import './views/mainView/styles.css';
+import MainView from './views/mainView/mainView';
+import { AccordionItem } from './types/accrordionItem';
 
 class App {
-  private usersPage!: UsersView;
   private currentView!: BaseView;
   private routers!: Routers;
   private defaultPath: string | undefined = undefined;
   private currentPath!: string;
+  private selector: string;
 
-  constructor(routers: Routers) {
+  constructor(selector: string, routers: Routers) {
+    this.selector = selector;
     this.routers = routers;
 
     this.setDefaultPath();
+    this.setHash();
+    this.render();
+
+    window.addEventListener('hashchange', this.chageHashHandler.bind(this));
+  }
+
+  private setHash = (): void => {
     this.currentPath = getPathFromHash(window.location.hash);
+
+    if (this.currentPath && this.routers[this.currentPath]) return;
+
+    if (this.currentPath && !this.routers[this.currentPath]) {
+      this.currentPath = this.defaultPath!;
+      window.location.hash = this.defaultPath!;
+      return;
+    }
     
     if (!this.currentPath && this.defaultPath) {
       window.location.hash = this.defaultPath;
-      this.currentPath = getPathFromHash(window.location.hash);
+      this.currentPath = this.defaultPath;
     }
-
-    this.render();
   }
 
-  private setDefaultPath = (): void => {
+  private setDefaultPath(): void {
     Object.keys(this.routers).forEach(path => {
-      // @ts-ignore
       if (this.routers[path].default) {
         this.defaultPath = path;
       }
     });
   }
 
+  private chageHashHandler(e: Event): void {
+    console.log('chageHashHandler');
+    this.setHash();
+  }
+
   private render(): void {
-    this.currentView = new this.routers[this.currentPath].view(this.routers[this.currentPath].className);
+    const route = this.routers[this.currentPath];
+    route.initialData ?
+      this.currentView = new this.routers[this.currentPath].view(this.selector, route.initialData) :
+      this.currentView = new this.routers[this.currentPath].view(this.selector);
     this.currentView.render();
   }
 }
 
+const initialData: AccordionItem[] = [
+  {title: 'Childhood'},
+  {title: 'University'},
+  {title: 'Work'}
+];
+
 const routers: Routers = {
   'users': {
-    className: '.fans-container',
-    view: UsersView,
-    // @ts-ignore
-    default: true
+    view: UsersView
+  },
+  'main': {
+    view: MainView,
+    default: true,
+    initialData
   }
-}
-const app = new App(routers);
+};
 
-window.addEventListener('hashchange', (e: Event) => {
-  e.preventDefault();
-
-  // 1) Get hash and compare with site map
-  // 2) Render component 
-});
+const app = new App('#root', routers);

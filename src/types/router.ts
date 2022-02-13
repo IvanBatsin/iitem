@@ -1,9 +1,9 @@
-import UsersView from "../views/usersView/usersView";
+import BaseView from "./baseView";
 
 export interface Router {
-  className: string,
-  view: typeof UsersView,
-  default?: boolean 
+  view: typeof BaseView,
+  default?: boolean,
+  initialData?: any
 }
 
 export interface Routers {

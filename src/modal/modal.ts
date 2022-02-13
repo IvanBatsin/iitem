@@ -1,7 +1,7 @@
 import { getTemplate } from "./template";
 import './styles.css';
 import User from "../types/user";
-import { createClass } from "../utils/createClass";
+import { generateClassName } from "../utils/generateClass";
 
 export default class Modal {
   private rootEl!: HTMLElement;
@@ -20,9 +20,10 @@ export default class Modal {
   private destroyFunc: () => void
 
   constructor(emit: (user: User) => void) {
-    this.rootEl = document.querySelector('.modal-container')!;
+    this.rootEl = document.createElement('div') as HTMLDivElement;
+    document.body.append(this.rootEl);
     this.emit = emit;
-    this.className = createClass();
+    this.className = generateClassName();
 
     this.formSubmutControl = async (e: Event): Promise<void> => {
       e.preventDefault();
