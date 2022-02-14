@@ -6,22 +6,20 @@ import './styles.css';
 import BaseView from "../../types/baseView";
 
 export default class UsersView extends BaseView {
-  private rootEl: HTMLElement;
+  private rootEl: HTMLDivElement;
   private data!: User[];
   private isLoading!: boolean;
   private addButton: HTMLButtonElement | null = null;
   private usersBlock: HTMLDivElement | null = null;
   private modal!: Modal;
 
-  private showModal!: () => void;
-
   constructor(selector: string) {
     super(selector);
-    this.rootEl = document.querySelector(selector) as HTMLElement;
-    this.modal = new Modal(this.addNewUser.bind(this));
-
-    this.showModal = () => this.modal.init();
+    this.rootEl = document.querySelector(selector) as HTMLDivElement;
+    this.modal = new Modal(this.rootEl, this.addNewUser.bind(this));
   }
+
+  private showModal = () => this.modal.init();
 
   private getUsersTemplate(): string {
     let template = '';
