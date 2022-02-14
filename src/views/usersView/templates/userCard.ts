@@ -2,7 +2,7 @@ import User from "../../../types/user";
 
 export const UserCard = (user: User): string => {
   return `
-    <div class="col">
+    <div class="col-3">
       <div class="card card-hover">
         <img src="../../assets/avatar.png" class="card-img-top" alt="user - ${user.name}">
         <div class="card-body">

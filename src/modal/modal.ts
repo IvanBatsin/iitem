@@ -16,35 +16,34 @@ export default class Modal {
   private isLoading: boolean = false;
   private isOpen!: boolean; 
 
-  private formSubmutControl!: (e: Event) => Promise<void>
-  private destroyFunc: () => void
-
-  constructor(emit: (user: User) => void) {
-    this.rootEl = document.createElement('div') as HTMLDivElement;
-    document.body.append(this.rootEl);
+  constructor(rootEl: HTMLDivElement, emit: (user: User) => void) {
+    this.rootEl = rootEl;
     this.emit = emit;
     this.className = generateClassName();
 
-    this.formSubmutControl = async (e: Event): Promise<void> => {
-      e.preventDefault();
-      e.stopPropagation();
-      if (!this.form!.checkValidity()) {
-        this.form!.classList.add('was-validated');
-        return;
-      }
+    this.destroyFunc = this.destroy.bind(this);
+    this.formSubmutControl = this.formSubmutControl.bind(this);
+  } 
 
-      const inputs = this.form?.querySelectorAll('input');
-      const newUser: User = {} as User; 
-      inputs?.forEach(input => {
-        const key = input.dataset.type as keyof User;
-        newUser[key] = input.value;
-      });
-
-      await this.addUser(newUser);
+  private async formSubmutControl(e: Event): Promise<void> {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!this.form!.checkValidity()) {
+      this.form!.classList.add('was-validated');
+      return;
     }
 
-    this.destroyFunc = () => this.destroy();
-  } 
+    const inputs = this.form?.querySelectorAll('input');
+    const newUser: User = {} as User; 
+    inputs?.forEach(input => {
+      const key = input.dataset.type as keyof User;
+      newUser[key] = input.value;
+    });
+
+    await this.addUser(newUser);
+  }
+
+  private destroyFunc = this.destroy;
 
   private async addUser(user: User): Promise<void> {
     this.isLoading = true;
@@ -98,7 +97,7 @@ export default class Modal {
   }
 
   init(): void {
-    this.rootEl.innerHTML = getTemplate(this.className);
+    this.rootEl.innerHTML += getTemplate(this.className);
     this.overlay = this.rootEl.querySelector('.overlay');
     this.modal = this.overlay!.querySelector(`.${this.className}`);
     this.form = this.modal?.querySelector('.needs-validation') as HTMLFormElement;
@@ -119,6 +118,6 @@ export default class Modal {
     this.overlay?.classList.toggle('show');
     this.setIsOpen(false);
 
-    setTimeout(() => this.rootEl.innerHTML = '', 300);
+    setTimeout(() => this.overlay!.remove(), 300);
   }
 }

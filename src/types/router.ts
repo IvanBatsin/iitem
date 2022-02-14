@@ -3,7 +3,7 @@ import BaseView from "./baseView";
 export interface Router {
   view: typeof BaseView,
   default?: boolean,
-  initialData?: any
+  props?: any
 }
 
 export interface Routers {

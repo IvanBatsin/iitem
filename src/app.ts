@@ -4,8 +4,7 @@ import { Routers } from './types/router';
 import { getPathFromHash } from './utils/getPath';
 import UsersView from './views/usersView/usersView';
 import './views/mainView/styles.css';
-import MainView from './views/mainView/mainView';
-import { AccordionItem } from './types/accrordionItem';
+import MainView, { MainViewProps } from './views/mainView/mainView';
 
 class App {
   private currentView!: BaseView;
@@ -13,6 +12,7 @@ class App {
   private defaultPath: string | undefined = undefined;
   private currentPath!: string;
   private selector: string;
+  private canUpdate!: boolean;
 
   constructor(selector: string, routers: Routers) {
     this.selector = selector;
@@ -55,20 +55,32 @@ class App {
     this.setHash();
   }
 
-  private render(): void {
-    const route = this.routers[this.currentPath];
-    route.initialData ?
-      this.currentView = new this.routers[this.currentPath].view(this.selector, route.initialData) :
-      this.currentView = new this.routers[this.currentPath].view(this.selector);
-    this.currentView.render();
+  private async render(): Promise<void> {
+    try {
+      const route = this.routers[this.currentPath];
+      route.props ?
+        this.currentView = new this.routers[this.currentPath].view(this.selector, route.props) :
+        this.currentView = new this.routers[this.currentPath].view(this.selector);
+      await this.currentView.render();
+      this.canUpdate = true;
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
 
-const initialData: AccordionItem[] = [
-  {title: 'Childhood'},
-  {title: 'University'},
-  {title: 'Work'}
-];
+const mainViewProps: MainViewProps = {
+  accordionItems: [
+    {title: 'Childhood'},
+    {title: 'University'},
+    {title: 'Work'}
+  ],
+  socialIcons: [
+    {title: 'facebook'},
+    {title: 'instagram'},
+    {title: 'twitter'}
+  ]
+}
 
 const routers: Routers = {
   'users': {
@@ -77,7 +89,7 @@ const routers: Routers = {
   'main': {
     view: MainView,
     default: true,
-    initialData
+    props: mainViewProps
   }
 };
 
