@@ -1,5 +1,5 @@
 export default class BaseView {
-  constructor(selector: string, initialData?: any) {}
+  constructor(selector: string, props?: any) {}
   render (): Promise<void> { return Promise.resolve()}
   destroy () {}
 }

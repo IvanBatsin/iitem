@@ -11,12 +11,12 @@ import { SocialItem } from "./templates/socialIcon";
 
 export interface MainViewProps {
   accordionItems: AccordionItem[],
-  socialIcons: AccordionItem[]
+  socialIcons: {name: string, svg: string}[]
 }
 
 export default class MainView extends BaseView {
   private rootEl: HTMLElement;
-  private socialIcons: AccordionItem[] = [];
+  private socialIcons: {name: string, svg: string}[] = [];
   private accordionItems: AccordionItem[] = [];
   private accordionItemsEl!: HTMLDivElement[];
 
@@ -87,5 +87,6 @@ export default class MainView extends BaseView {
     this.accordionItemsEl.forEach(item => {;
       item.removeEventListener('click', this.accordionItemHandler);
     });
+    this.rootEl.innerHTML = '';
   }
 } 

@@ -16,8 +16,7 @@ export default class Modal {
   private isLoading: boolean = false;
   private isOpen!: boolean; 
 
-  constructor(rootEl: HTMLDivElement, emit: (user: User) => void) {
-    this.rootEl = rootEl;
+  constructor(emit: (user: User) => void) {
     this.emit = emit;
     this.className = generateClassName();
 
@@ -97,6 +96,8 @@ export default class Modal {
   }
 
   init(): void {
+    this.rootEl = document.createElement('div');
+    document.body.append(this.rootEl);
     this.rootEl.innerHTML += getTemplate(this.className);
     this.overlay = this.rootEl.querySelector('.overlay');
     this.modal = this.overlay!.querySelector(`.${this.className}`);
@@ -118,6 +119,6 @@ export default class Modal {
     this.overlay?.classList.toggle('show');
     this.setIsOpen(false);
 
-    setTimeout(() => this.overlay!.remove(), 300);
+    setTimeout(() => this.rootEl.remove(), 300);
   }
 }
