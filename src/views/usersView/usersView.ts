@@ -16,7 +16,7 @@ export default class UsersView extends BaseView {
   constructor(selector: string) {
     super(selector);
     this.rootEl = document.querySelector(selector) as HTMLDivElement;
-    this.modal = new Modal(this.rootEl, this.addNewUser.bind(this));
+    this.modal = new Modal(this.addNewUser.bind(this));
   }
 
   private showModal = () => this.modal.init();
@@ -43,16 +43,14 @@ export default class UsersView extends BaseView {
   async render(): Promise<void> {
     try {
       this.isLoading = true;
-      this.rootEl.innerHTML += UsersPageTemplate(this.getUsersTemplate.bind(this), this.isLoading);
+      this.rootEl.innerHTML = UsersPageTemplate(this.getUsersTemplate.bind(this), this.isLoading);
       const req = await window.fetch(process.env.BASE_URL!);
       const res = await req.json() as User[];
       this.data = res;
       this.isLoading = false;
-      this.rootEl.innerHTML = '';
-      this.rootEl.innerHTML += UsersPageTemplate(this.getUsersTemplate.bind(this), this.isLoading);
-      this.usersBlock = this.rootEl.querySelector('#users_page_alert');
+      this.rootEl.innerHTML = UsersPageTemplate(this.getUsersTemplate.bind(this), this.isLoading);
       this.addButton = this.rootEl.querySelector('#add');
-      this.usersBlock = this.rootEl.querySelector('.users-block');;
+      this.usersBlock = this.rootEl.querySelector('.users-block');
   
       this.addButton?.addEventListener('click', this.showModal);
     } catch (error) {
